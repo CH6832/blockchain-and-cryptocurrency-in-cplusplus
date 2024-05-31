@@ -19,14 +19,6 @@ This project simulates a basic blockchain and cryptocurrency system. It demonstr
     ├── COPYRIGHT - project copyright
     └── README.md - relevant information about the project
 
-    .
-    ├── app.py - flask application
-    ├── Blockchain.py - the Blockchain class
-    ├── main.py - program entry point
-    ├── nodes.json - contains all nodes
-    ├── README.md - relevant information about the project
-    └── transaction.json - single transation data
-
 ## :notebook: Features
 
 * Mine a block
