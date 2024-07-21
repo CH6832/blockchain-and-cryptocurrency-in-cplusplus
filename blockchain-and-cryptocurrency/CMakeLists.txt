@@ -2,16 +2,18 @@
 # project specific logic here.
 #
 
-set(CMAKE_TOOLCHAIN_FILE "${CMAKE_CURRENT_SOURCE_DIR}/vcpkg/scripts/buildsystems/vcpkg.cmake" CACHE STRING "Vcpkg toolchain file")
-
 # Add source to this project's executable.
-add_executable (blockchain-and-cryptocurrency "blockchain.cpp" "blockchain.h" "transaction.cpp" "transaction.h" "wallet.cpp" "wallet.h" "main.cpp")
+add_executable (blockchain-and-cryptocurrency "main.cpp"  "Blockchain.cpp" "Blockchain.h" "Block.h" "Block.cpp")
 
 if (CMAKE_VERSION VERSION_GREATER 3.12)
   set_property(TARGET blockchain-and-cryptocurrency PROPERTY CXX_STANDARD 20)
 endif()
 
 # TODO: Add tests and install targets if needed.
+
+# Find OpenSSL
 find_package(OpenSSL REQUIRED)
-# target_link_libraries(blockchain_simulation OpenSSL::Crypto)
+# Include the OpenSSL directories
+target_include_directories(blockchain-and-cryptocurrency PRIVATE ${OPENSSL_INCLUDE_DIR})
+# Link against the OpenSSL libraries
 target_link_libraries(blockchain-and-cryptocurrency PRIVATE OpenSSL::SSL OpenSSL::Crypto)

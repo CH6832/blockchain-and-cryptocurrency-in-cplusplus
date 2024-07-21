@@ -3,7 +3,8 @@
 #include <openssl/err.h>
 #include <iostream>
 #include <sstream>
-#include "wallet.h"
+#include <iomanip>
+#include "Wallet.h"
 
 Wallet::Wallet() {
     generateKeys();

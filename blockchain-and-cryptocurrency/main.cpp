@@ -1,77 +1,48 @@
-#include <iostream>
-#include "blockchain.h"
-#include "transaction.h"
-#include "wallet.h"
-
-using namespace std;
-
-void printMenu() {
-    cout << "Blockchain Simulation Menu:" << endl;
-    cout << "1. Add a new block" << endl;
-    cout << "2. Print the blockchain" << endl;
-    cout << "3. Validate the blockchain" << endl;
-    cout << "4. Create a new transaction" << endl;
-    cout << "5. Exit" << endl;
-}
+﻿#include <iostream>
+#include <string>
+#include <vector>
+#include "Blockchain.h"
+#include "Wallet.h"
 
 int main() {
+    // Create a new blockchain
     Blockchain blockchain;
 
-    Wallet wallet1;
-    Wallet wallet2;
+    // Create a wallet for signing transactions
+    Wallet wallet;
 
-    while (true) {
-        printMenu();
-        int choice;
-        cin >> choice;
+    // Add a block with transactions
+    std::string transactions1 = "Transaction 1: Alice pays Bob 10 BTC";
+    Block block1(1, blockchain.getLatestBlock().hash, transactions1);
+    blockchain.addBlock(block1);
 
-        if (choice == 1) {
-            string transactions;
-            cout << "Enter transactions: ";
-            cin.ignore();
-            getline(cin, transactions);
-            Block newBlock(blockchain.getLatestBlock().index + 1, blockchain.getLatestBlock().hash, transactions);
-            blockchain.addBlock(newBlock);
-            cout << "Block added." << endl;
-        }
-        else if (choice == 2) {
-            blockchain.printChain();
-        }
-        else if (choice == 3) {
-            if (blockchain.isChainValid()) {
-                cout << "Blockchain is valid." << endl;
-            }
-            else {
-                cout << "Blockchain is invalid!" << endl;
-            }
-        }
-        else if (choice == 4) {
-            string sender, receiver;
-            double amount;
-            cout << "Enter sender: ";
-            cin >> sender;
-            cout << "Enter receiver: ";
-            cin >> receiver;
-            cout << "Enter amount: ";
-            cin >> amount;
+    std::cout << "Blockchain after adding block 1:" << std::endl;
+    blockchain.printChain();
 
-            Transaction tx(sender, receiver, amount);
-            string signature = wallet1.signTransaction(tx.txHash);
-            cout << "Transaction signed: " << signature << endl;
-            if (wallet2.verifyTransaction(tx.txHash, signature)) {
-                cout << "Transaction verified." << endl;
-            }
-            else {
-                cout << "Transaction verification failed." << endl;
-            }
-        }
-        else if (choice == 5) {
-            break;
-        }
-        else {
-            cout << "Invalid choice. Try again." << endl;
-        }
-    }
+    // Add another block with transactions
+    std::string transactions2 = "Transaction 2: Bob pays Charlie 5 BTC";
+    Block block2(2, blockchain.getLatestBlock().hash, transactions2);
+    blockchain.addBlock(block2);
+
+    std::cout << "\nBlockchain after adding block 2:" << std::endl;
+    blockchain.printChain();
+
+    // Demonstrate signing a transaction
+    std::string txHash = block1.calculateHash(); // For demonstration, use the hash of block1
+    std::string signature = wallet.signTransaction(txHash);
+
+    std::cout << "\nSignature for transaction hash " << txHash << ":" << std::endl;
+    std::cout << signature << std::endl;
+
+    // Verify the signed transaction
+    bool isVerified = wallet.verifyTransaction(txHash, signature);
+
+    std::cout << "\nTransaction verification result: " << (isVerified ? "Valid" : "Invalid") << std::endl;
+
+    // Check if blockchain is valid
+    bool isChainValid = blockchain.isChainValid();
+
+    std::cout << "\nBlockchain validation result: " << (isChainValid ? "Valid" : "Invalid") << std::endl;
 
     return 0;
 }
